@@ -1,0 +1,22 @@
+[
+  {
+    "name": "prem",
+    "role": "Security Guard",
+    "contact_info": "vtu23173@veltech.edu.in"
+  },
+  {
+    "name": "premm",
+    "role": "Admin",
+    "contact_info": "premm4227@gmail.com"
+  },
+  {
+    "name": "Venky",
+    "role": "Security Guard",
+    "contact_info": "narravenkatesh@gmail.com"
+  },
+  {
+    "name": "prem",
+    "role": "Resident",
+    "contact_info": "pream4227@gmail.com"
+  }
+]

@@ -1,0 +1,88 @@
+<div class="login-container animate-fade-in">
+    <div class="login-card">
+        <!-- Left Panel: Illustration & Branding -->
+        <div class="left-panel">
+            <div class="illustration-container">
+                <img src="assets/images/building.png" alt="Building" class="hero-image">
+            </div>
+
+            <div class="branding-text">
+                <h1>Join SafeGate</h1>
+                <p>Create your account to manage visitors, parcels, and approvals seamlessly.</p>
+            </div>
+
+
+        </div>
+
+        <!-- Right Panel: Registration Form -->
+        <div class="right-panel">
+            <div class="form-header">
+                <div class="logo-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    <span>SAFE GATE</span>
+                </div>
+            </div>
+
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="login-form">
+
+                <!-- Role Selection -->
+                <div class="input-group">
+                    <label>Select Role</label>
+                    <div class="role-grid-compact">
+                        <div *ngFor="let role of roles" class="role-chip" [class.selected]="selectedRole === role.id"
+                            (click)="selectRole(role.id)">
+                            <span>{{ role.label }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Name & Phone Grid -->
+                <div class="grid-row">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" formControlName="name" placeholder="e.g. John Doe" />
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="tel" formControlName="phone" placeholder="e.g. 9876543210" />
+                    </div>
+                </div>
+
+                <!-- Unit (if resident) & Email Grid -->
+                <!-- If Resident, show Unit on left, Email on right. If not, Email full width or auto? -->
+                <!-- Since Unit is conditional, let's keep it simple. If Unit exists, paired with Email. If not, Email is full width. -->
+
+                <div [class.grid-row]="selectedRole === 'Resident'">
+                    <div class="input-group" *ngIf="selectedRole === 'Resident'">
+                        <label>Unit Number</label>
+                        <input type="text" formControlName="unitNumber" placeholder="e.g. A-101" />
+                    </div>
+
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" formControlName="email" placeholder="name@company.com" />
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+                        placeholder="Create a password" />
+                </div>
+
+                <button type="submit" [disabled]="loading" class="btn-signin">
+                    <span *ngIf="!loading">Create Account</span>
+                    <span *ngIf="loading">Creating...</span>
+                </button>
+
+                <div class="register-row">
+                    <span>Already have an account?</span>
+                    <a routerLink="/login">Sign In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

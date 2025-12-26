@@ -1,0 +1,23 @@
+<h2>Log Visitor</h2>
+
+<form [formGroup]="visitorForm" (ngSubmit)="submit()">
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Visitor Name</mat-label>
+        <input matInput formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Purpose of Visit</mat-label>
+        <input matInput formControlName="purpose">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Vehicle Details (optional)</mat-label>
+        <input matInput formControlName="vehicleDetails">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary">
+        Submit
+    </button>
+</form>
