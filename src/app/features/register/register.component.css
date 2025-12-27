@@ -1,8 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :host {
     display: block;
     font-family: 'Outfit', sans-serif;
+    --primary-glow: rgba(16, 185, 129, 0.4);
 }
 
 .login-container {
@@ -11,12 +12,39 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    /* Background moved to ::before for blurring */
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-image: url('../../../assets/images/auth-background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* Light Mint Green Background - Removed for Image */
-    padding: 2rem;
+    filter: blur(5px);
+    transform: scale(1.05);
+    /* Slight scale to hide blurred edges */
+    z-index: 0;
+}
+
+.login-container::after {
+    content: '';
+    position: absolute;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle, rgba(21, 128, 61, 0.08) 0%, transparent 70%);
+    top: -20%;
+    left: -20%;
+    pointer-events: none;
+    z-index: 1;
 }
 
 /* Card */
@@ -24,20 +52,34 @@
     display: flex;
     width: 100%;
     max-width: 1200px;
-    min-height: 700px;
     height: auto;
-    /* Flexible height */
-    background: #ffffff;
-    border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    min-height: 750px;
+    background: var(--glass-background);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    /* Clean Platinum Border */
+    border-radius: var(--radius-lg);
+    box-shadow:
+        var(--glass-shadow),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     overflow: hidden;
+    position: relative;
+    z-index: 10;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+
+.login-card:hover {
+    transform: scale(1.002);
 }
 
 /* Left Panel */
 .left-panel {
     flex: 1;
-    background-color: #e7e5e4;
-    /* Stone-200 to match building stone */
+    background-color: #f0fdf4;
+    /* Minty White tint based on nature background */
     padding: 4rem;
     display: flex;
     flex-direction: column;
@@ -45,7 +87,8 @@
     align-items: center;
     text-align: center;
     position: relative;
-    color: #1e293b;
+    color: #064e3b;
+    /* Deep emerald text */
 }
 
 .illustration-container {
@@ -56,13 +99,37 @@
     width: 100%;
 }
 
-.hero-svg,
 .hero-image {
     width: 100%;
-    max-width: 400px;
-    height: auto;
-    filter: drop-shadow(0 10px 15px rgba(22, 163, 74, 0.2));
+    max-width: 500px;
+    height: 400px;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.1));
     object-fit: contain;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.illustration-container::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+    z-index: -1;
+    opacity: 0.3;
 }
 
 .branding-text {
@@ -72,19 +139,21 @@
 }
 
 .branding-text h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 3.5rem;
+    font-weight: 800;
     margin-bottom: 1rem;
-    color: #1e293b;
-    letter-spacing: -0.5px;
+    color: var(--secondary);
+    letter-spacing: -2px;
+    line-height: 1.1;
 }
 
 .branding-text p {
-    font-size: 1.1rem;
-    color: #475569;
+    font-size: 1.15rem;
+    color: var(--muted-foreground);
     line-height: 1.6;
     max-width: 400px;
     margin: 0 auto;
+    font-weight: 500;
 }
 
 .carousel-dots {
@@ -97,14 +166,13 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: #cbd5e1;
+    background-color: var(--border);
     transition: all 0.3s;
 }
 
 .dot.active {
-    width: 24px;
-    background-color: #15803d;
-    /* Green accent */
+    width: 28px;
+    background-color: var(--primary);
     border-radius: 4px;
 }
 
@@ -130,20 +198,21 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    color: #1e293b;
+    color: var(--secondary);
 }
 
 .logo-box svg {
-    width: 40px;
-    height: 40px;
+    width: 64px;
+    height: 64px;
+    color: var(--primary);
 }
 
 .logo-box span {
-    font-size: 1.25rem;
-    font-weight: 600;
-    letter-spacing: 1px;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: #334155;
+    color: var(--secondary);
 }
 
 /* Form Styles */
@@ -159,28 +228,59 @@
     gap: 0.5rem;
 }
 
+.input-group .label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
 .input-group label {
     font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+    margin-bottom: 0;
+}
+
+.requirement-hint {
+    font-size: 0.75rem;
+    color: var(--primary);
     font-weight: 500;
-    color: #64748b;
+    opacity: 0.8;
 }
 
 .input-group input {
     width: 100%;
-    padding: 0.875rem 1rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
     font-size: 1rem;
-    background-color: #ffffff;
-    transition: all 0.2s;
-    color: #1e293b;
+    background-color: var(--input);
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    color: var(--foreground);
 }
 
 .input-group input:focus {
     outline: none;
-    border-color: #15803d;
-    /* Green focus */
-    box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    transform: translateY(-1px);
+}
+
+.input-group input.is-invalid {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.input-group input.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.error-text {
+    font-size: 0.75rem;
+    color: #ef4444;
+    font-weight: 500;
+    margin-top: -0.25rem;
 }
 
 .input-group input::placeholder {
@@ -189,21 +289,25 @@
 
 .btn-signin {
     width: 100%;
-    padding: 1rem;
-    background-color: #15803d;
-    /* Green Button */
+    padding: 1.125rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
-    font-size: 1rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
     cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 1rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-top: 1.5rem;
+    box-shadow: 0 10px 20px -10px var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
 }
 
 .btn-signin:hover {
-    background-color: #166534;
+    transform: translateY(-2px);
+    box-shadow: 0 20px 30px -10px var(--primary);
+    filter: brightness(1.1);
 }
 
 .btn-signin:disabled {
@@ -237,27 +341,28 @@
 }
 
 .role-chip {
-    padding: 0.5rem 1rem;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 20px;
+    padding: 0.625rem 1.25rem;
+    background: var(--muted);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-full);
     font-size: 0.875rem;
-    font-weight: 500;
-    color: #64748b;
+    font-weight: 600;
+    color: var(--muted-foreground);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
     user-select: none;
 }
 
 .role-chip:hover {
-    background: #e2e8f0;
+    background: var(--border);
+    transform: translateY(-1px);
 }
 
 .role-chip.selected {
-    background: #15803d;
+    background: var(--primary);
     color: white;
-    border-color: #15803d;
-    box-shadow: 0 4px 6px -1px rgba(21, 128, 61, 0.2);
+    border-color: var(--primary);
+    box-shadow: 0 8px 16px -4px var(--primary);
 }
 
 /* Grid Layout for Form */

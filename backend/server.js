@@ -58,10 +58,35 @@ db.connect((err) => {
     for (const query of queries) {
       await db.promise().query(query).catch(err => console.error('Error creating table:', err));
     }
+
+    // Ensure missing columns exist in users table (for existing installations)
+    const alterQueries = [
+      `ALTER TABLE users ADD COLUMN unit_number VARCHAR(50) AFTER contact_info`,
+      `ALTER TABLE users ADD COLUMN badge_number VARCHAR(50) AFTER unit_number`
+    ];
+
+    for (const query of alterQueries) {
+      await db.promise().query(query).catch(err => {
+        // Suppress errors if column already exists
+        if (err.code !== 'ER_DUP_COLUMN_NAME' && err.errno !== 1060) {
+          console.error('Info: Column already exists or other minor DB notice.');
+        }
+      });
+    }
+
     console.log('All tables checked/created');
   };
 
   createTables();
+
+  // Root route
+  app.get('/', (req, res) => {
+    res.json({
+      message: 'SafeGate API Server is running',
+      status: 'success',
+      frontend_url: 'http://localhost:4200'
+    });
+  });
 
   // Start server after DB is ready
   app.use('/api/users', require('./routes/users')(db));

@@ -52,7 +52,8 @@ export class RegisterComponent {
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(6)]],
             role: [this.selectedRole, Validators.required],
-            unitNumber: [''] // Optional, only for residents
+            unitNumber: [''],
+            badgeNumber: ['']
         });
     }
 
@@ -60,16 +61,30 @@ export class RegisterComponent {
 
     selectRole(roleId: string) {
         this.selectedRole = roleId;
-        this.registerForm.patchValue({ role: roleId });
 
-        // Update unitNumber validator based on role
+        // Reset the form but keep the selected role
+        this.registerForm.reset({
+            role: roleId,
+            name: '',
+            phone: '',
+            email: '',
+            password: '',
+            unitNumber: '',
+            badgeNumber: ''
+        });
+
+        // Reset role-specific validators
+        this.registerForm.get('unitNumber')?.clearValidators();
+        this.registerForm.get('badgeNumber')?.clearValidators();
+
         if (roleId === 'Resident') {
             this.registerForm.get('unitNumber')?.setValidators([Validators.required]);
-        } else {
-            this.registerForm.get('unitNumber')?.clearValidators();
-            this.registerForm.patchValue({ unitNumber: '' });
+        } else if (roleId === 'Security Guard') {
+            this.registerForm.get('badgeNumber')?.setValidators([Validators.required]);
         }
+
         this.registerForm.get('unitNumber')?.updateValueAndValidity();
+        this.registerForm.get('badgeNumber')?.updateValueAndValidity();
     }
 
     togglePassword() {
@@ -98,9 +113,11 @@ export class RegisterComponent {
             password: this.registerForm.value.password
         };
 
-        // Add unit number if resident
+        // Add role-specific data
         if (this.registerForm.value.role === 'Resident' && this.registerForm.value.unitNumber) {
             payload.unit_number = this.registerForm.value.unitNumber;
+        } else if (this.registerForm.value.role === 'Security Guard' && this.registerForm.value.badgeNumber) {
+            payload.badge_number = this.registerForm.value.badgeNumber;
         }
 
         this.http.post(`${API_URL}/users/register`, payload)

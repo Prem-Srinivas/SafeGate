@@ -3,7 +3,7 @@
         <!-- Left Panel: Illustration & Branding -->
         <div class="left-panel">
             <div class="illustration-container">
-                <img src="assets/images/building.png" alt="Building" class="hero-image">
+                <img src="assets/images/building_login.png" alt="Building" class="hero-image">
             </div>
 
             <div class="branding-text">
@@ -29,18 +29,28 @@
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
                 <div class="input-group">
                     <label>Username or email</label>
-                    <input type="text" formControlName="email" placeholder="e.g. resident@safegate.com" />
+                    <input type="text" formControlName="email" placeholder="e.g. resident@safegate.com"
+                        [class.is-invalid]="f['email'].touched && f['email'].invalid" />
+                    <div *ngIf="f['email'].touched && f['email'].invalid" class="error-text">
+                        Please fill your email or username
+                    </div>
                 </div>
 
                 <div class="input-group">
-                    <label>Password</label>
+                    <div class="label-row">
+                        <label>Password</label>
+                        <span class="requirement-hint">Min. 6 characters</span>
+                    </div>
                     <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
-                        placeholder="************" />
+                        placeholder="Enter your password"
+                        [class.is-invalid]="f['password'].touched && f['password'].invalid" />
+                    <div *ngIf="f['password'].touched && f['password'].invalid" class="error-text">
+                        <span *ngIf="f['password'].errors?.['required']">Please fill your password</span>
+                        <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</span>
+                    </div>
                 </div>
 
-                <div class="form-actions">
-                    <a href="#" class="forgot-pass">Forgot password?</a>
-                </div>
+
 
                 <button type="submit" [disabled]="loading" class="btn-signin">
                     <span *ngIf="!loading">Sign in</span>

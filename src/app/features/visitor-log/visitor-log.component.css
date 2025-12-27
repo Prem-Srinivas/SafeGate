@@ -6,22 +6,21 @@
     background-color: var(--background);
 }
 
-/* Sidebar Styles (Shared) */
+/* Sidebar Styles Platinum */
 .sidebar {
-    width: 260px;
-    background: #1e293b;
-    /* Dark Slate to match Admin/Dashboard */
-    border-right: 1px solid #334155;
+    width: 280px;
+    background: var(--secondary);
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 64px;
+    top: 0;
     bottom: 0;
     left: 0;
     z-index: 50;
-    padding: 1.5rem;
-    padding-top: 2rem;
-    color: #f8fafc;
+    padding: 2rem;
+    color: var(--secondary-foreground);
+    box-shadow: var(--shadow-elite);
 }
 
 .sidebar-header {
@@ -44,10 +43,24 @@
     box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
 }
 
+.brand-info {
+    display: flex;
+    flex-direction: column;
+}
+
 .brand-text {
     font-size: 1.25rem;
     font-weight: 700;
+    line-height: 1;
     color: #f8fafc;
+}
+
+.brand-tagline {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    margin-top: 0.25rem;
 }
 
 .sidebar-nav {
@@ -124,9 +137,10 @@
 /* Main Content */
 .main-content {
     flex: 1;
-    margin-left: 260px;
-    padding: 2.5rem;
+    margin-left: 280px;
+    padding: 3rem;
     max-width: 1600px;
+    min-height: 100vh;
 }
 
 .top-header {
@@ -154,12 +168,18 @@
 }
 
 .premium-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow-premium);
-    border: 1px solid white;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-elite);
+    padding: 2.5rem;
+    border: 1px solid var(--border);
     height: 100%;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.1);
 }
 
 .h-full {
@@ -188,7 +208,7 @@
 }
 
 .icon-box.blue {
-    color: var(--primary);
+    color: var(--accent);
 }
 
 /* Form Styles */
@@ -230,20 +250,23 @@
 
 .btn-primary {
     width: 100%;
-    padding: 0.875rem;
-    background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
     border: none;
-    border-radius: 10px;
-    font-weight: 600;
+    border-radius: var(--radius-md);
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 20px -10px var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 12px -1px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 15px 25px -10px var(--primary);
+    filter: brightness(1.1);
 }
 
 .btn-primary:disabled {
@@ -260,13 +283,13 @@
 .search-compact {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: #f8fafc;
-    border: 1px solid var(--border);
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    width: 240px;
-    transition: all 0.2s;
+    gap: 0.75rem;
+    background: rgba(248, 250, 252, 0.5);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    padding: 0.6rem 1.25rem;
+    border-radius: 12px;
+    width: 280px;
+    transition: all 0.3s ease;
 }
 
 .search-compact:focus-within {
@@ -300,15 +323,20 @@
     background: #f8fafc;
 }
 
-.premium-table td {
-    padding: 1.25rem 1.5rem;
-    border-bottom: 1px solid var(--muted);
-    font-size: 0.95rem;
-    color: var(--foreground);
+.premium-table tr {
+    transition: all 0.2s ease;
 }
 
-.premium-table tr:last-child td {
-    border-bottom: none;
+.premium-table tbody tr:hover {
+    background: rgba(248, 250, 252, 0.5);
+    transform: scale(1.002);
+}
+
+.premium-table td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.4);
+    font-size: 0.95rem;
+    color: var(--foreground);
 }
 
 .cell-content {
@@ -358,35 +386,7 @@
     padding-bottom: 3rem;
 }
 
-.status-badge {
-    padding: 0.35rem 0.85rem;
-    border-radius: 99px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.025em;
-}
-
-.status-approved,
-.status-entered {
-    background: var(--status-approved-bg);
-    color: var(--status-approved-text);
-    border: 1px solid rgba(74, 222, 128, 0.2);
-}
-
-.status-waiting,
-.status-waiting-for-approval {
-    background: var(--status-pending-bg);
-    color: var(--status-pending-text);
-    border: 1px solid rgba(251, 146, 60, 0.2);
-}
-
-.status-rejected,
-.status-denied {
-    background: var(--status-error-bg);
-    color: var(--status-error-text);
-    border: 1px solid rgba(248, 113, 113, 0.2);
-}
+/* Status badges now handled globally in styles.css */
 
 @media (max-width: 1024px) {
     .content-grid {

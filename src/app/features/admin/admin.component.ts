@@ -36,7 +36,7 @@ export class AdminComponent implements OnInit {
   currentUser: User | null = null;
   users: any[] = [];
   filteredUsers: any[] = [];
-  displayedColumns: string[] = ['name', 'email', 'role', 'created_at', 'actions'];
+  displayedColumns: string[] = ['name', 'role', 'unit_or_badge', 'email', 'contact_info', 'created_at', 'actions'];
   today: Date = new Date();
   searchTerm: string = '';
 
@@ -105,7 +105,9 @@ export class AdminComponent implements OnInit {
       this.filteredUsers = this.users.filter(u =>
         u.name?.toLowerCase().includes(term) ||
         u.email?.toLowerCase().includes(term) ||
-        u.role?.toLowerCase().includes(term)
+        u.role?.toLowerCase().includes(term) ||
+        u.unit_number?.toLowerCase().includes(term) ||
+        u.contact_info?.toLowerCase().includes(term)
       );
     }
   }

@@ -33,22 +33,22 @@
     letter-spacing: -0.025em;
 }
 
-/* Sidebar Styles - Unified Premium Dark Theme */
+/* Sidebar Styles - Unified Premium Glass Theme */
+/* Sidebar Styles Platinum */
 .sidebar {
-    width: 260px;
-    background: #1e293b;
-    /* Dark Slate to match Admin */
-    border-right: 1px solid #334155;
+    width: 280px;
+    background: var(--secondary);
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 64px;
+    top: 0;
     bottom: 0;
     left: 0;
     z-index: 50;
-    padding: 1.5rem;
-    padding-top: 2rem;
-    color: #f8fafc;
+    padding: 2rem;
+    color: var(--secondary-foreground);
+    box-shadow: var(--shadow-elite);
 }
 
 .sidebar-header {
@@ -108,11 +108,13 @@
 }
 
 /* Main Content Area */
+/* Main Content area */
 .main-content {
     flex: 1;
-    margin-left: 260px;
-    padding: 2.5rem;
+    margin-left: 280px;
+    padding: 3rem;
     max-width: 1600px;
+    min-height: 100vh;
 }
 
 /* Global styles for top-header and header-tools are now in src/styles.css */
@@ -148,17 +150,17 @@
 }
 
 .stat-card {
-    background: white;
+    background: var(--surface);
     padding: 1.75rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid white;
-    transition: transform 0.2s;
+    border-radius: 20px;
+    box-shadow: var(--shadow-elite);
+    border: 1px solid var(--border);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-premium);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.1);
     border-color: var(--primary);
 }
 
@@ -238,11 +240,11 @@
 }
 
 .analytics-card {
-    background: white;
+    background: var(--surface);
     padding: 2rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow-premium);
-    border: 1px solid white;
+    border-radius: 24px;
+    box-shadow: var(--shadow-elite);
+    border: 1px solid var(--border);
 }
 
 .card-title-row {
@@ -363,11 +365,11 @@
 
 /* Recent Activity */
 .recent-activity-section {
-    background: white;
+    background: var(--surface);
     padding: 2rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow-premium);
-    border: 1px solid white;
+    border-radius: 24px;
+    box-shadow: var(--shadow-elite);
+    border: 1px solid var(--border);
 }
 
 .section-header {
@@ -454,39 +456,7 @@
     font-weight: 500;
 }
 
-.status-badge {
-    padding: 0.35rem 0.85rem;
-    border-radius: 99px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.025em;
-}
-
-.status-approved,
-.status-entered,
-.status-received,
-.status-collected {
-    background: var(--status-approved-bg);
-    color: var(--status-approved-text);
-    border: 1px solid rgba(74, 222, 128, 0.2);
-}
-
-.status-waiting,
-.status-pending,
-.status-in-transit,
-.status-waiting-for-approval {
-    background: var(--status-pending-bg);
-    color: var(--status-pending-text);
-    border: 1px solid rgba(251, 146, 60, 0.2);
-}
-
-.status-rejected,
-.status-denied {
-    background: var(--status-error-bg);
-    color: var(--status-error-text);
-    border: 1px solid rgba(248, 113, 113, 0.2);
-}
+/* Status badges handled globally */
 
 .empty-state {
     text-align: center;

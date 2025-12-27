@@ -2,14 +2,6 @@
 CREATE DATABASE IF NOT EXISTS visitor_management;
 USE visitor_management;
 
--- Drop existing tables if they exist to reset schema
-DROP TABLE IF EXISTS activity_logs;
-DROP TABLE IF EXISTS visitors_parcels;
-DROP TABLE IF EXISTS residents;
-DROP TABLE IF EXISTS security_guards;
-DROP TABLE IF EXISTS admins;
-DROP TABLE IF EXISTS users;
-
 -- Users Table
 -- Merges Resident, Security Guard, and Admin roles into one table
 CREATE TABLE users (

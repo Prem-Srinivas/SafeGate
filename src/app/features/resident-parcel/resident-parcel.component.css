@@ -7,11 +7,11 @@
 }
 
 /* Sidebar Styles - Consistent Dark Theme */
+/* Sidebar Styles Platinum */
 .sidebar {
-    width: 260px;
-    background: #1e293b;
-    /* Dark Slate */
-    border-right: 1px solid #334155;
+    width: 280px;
+    background: var(--secondary);
+    border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -19,8 +19,9 @@
     bottom: 0;
     left: 0;
     z-index: 50;
-    padding: 1.5rem;
-    color: #f8fafc;
+    padding: 2rem;
+    color: var(--secondary-foreground);
+    box-shadow: var(--shadow-elite);
 }
 
 .sidebar-header {
@@ -123,9 +124,10 @@
 /* Main Content */
 .main-content {
     flex: 1;
-    margin-left: 260px;
-    padding: 2.5rem;
-    max-width: 1200px;
+    margin-left: 280px;
+    padding: 3rem;
+    max-width: 1600px;
+    min-height: 100vh;
 }
 
 .top-header {
@@ -196,23 +198,23 @@
 }
 
 .premium-card {
-    background: white;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-elite);
     padding: 1.5rem;
-    border-radius: 16px;
-    box-shadow: var(--shadow-premium);
-    border: 1px solid white;
+    border: 1px solid var(--border);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.1);
 }
 
 .parcel-card-premium {
     position: relative;
     border: 1px solid var(--border);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.parcel-card-premium:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-strong);
-    border-color: var(--primary-light);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-header-clean {
@@ -234,24 +236,7 @@
     text-transform: uppercase;
 }
 
-.status-btn {
-    padding: 0.25rem 0.6rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: capitalize;
-    display: inline-block;
-}
-
-.status-received {
-    background: var(--status-info-bg);
-    color: var(--status-info-text);
-}
-
-.status-acknowledged {
-    background: var(--status-warning-bg);
-    color: var(--status-warning-text);
-}
+/* Status markers now globally handled */
 
 .time-meta {
     font-size: 0.75rem;
@@ -433,19 +418,7 @@
     padding-bottom: 3rem;
 }
 
-.status-collected {
-    background: var(--status-approved-bg);
-    color: var(--status-approved-text);
-    padding: 0.25rem 0.6rem;
-    border-radius: 99px;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-.status-rejected {
-    background: var(--status-error-bg);
-    color: var(--status-error-text);
-}
+/* Status badges handled globally */
 
 .loading-state {
     display: flex;
