@@ -8,15 +8,22 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  host: (process.env.DB_HOST || 'localhost').trim(),
+  user: (process.env.DB_USER || 'root').trim(),
+  password: (process.env.DB_PASSWORD || 'Prem31@@').trim(),
+  database: (process.env.DB_NAME || 'visitor_management').trim()
 });
 
 db.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to MySQL');
+  if (err) {
+    console.error('MySQL connection error details:');
+    console.error('Host:', process.env.DB_HOST || 'localhost');
+    console.error('User:', process.env.DB_USER || 'root');
+    console.error('Error Code:', err.code);
+    console.error('SQL State:', err.sqlState);
+    throw err;
+  }
+  console.log('Connected to MySQL successfully');
 
   // Create tables if not exist
   const createTables = async () => {
