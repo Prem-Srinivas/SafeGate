@@ -1,0 +1,67 @@
+<div class="login-container animate-fade-in">
+    <div class="login-card">
+        <!-- Left Panel: Illustration & Branding -->
+        <div class="left-panel">
+            <div class="illustration-container">
+                <img src="assets/images/building_login.png" alt="Building" class="hero-image">
+            </div>
+
+            <div class="branding-text">
+                <h1>Welcome to SafeGate</h1>
+                <p>Unleash seamless community living with our advanced Visitor & Parcel Management Platform.</p>
+            </div>
+
+
+        </div>
+
+        <!-- Right Panel: Login Form -->
+        <div class="right-panel">
+            <div class="form-header">
+                <div class="logo-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    <span>SAFE GATE</span>
+                </div>
+            </div>
+
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+                <div class="input-group">
+                    <label>Username or email</label>
+                    <input type="text" formControlName="email" placeholder="e.g. resident@safegate.com"
+                        [class.is-invalid]="f['email'].touched && f['email'].invalid" />
+                    <div *ngIf="f['email'].touched && f['email'].invalid" class="error-text">
+                        Please fill your email or username
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Password</label>
+                        <span class="requirement-hint">Min. 6 characters</span>
+                    </div>
+                    <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+                        placeholder="Enter your password"
+                        [class.is-invalid]="f['password'].touched && f['password'].invalid" />
+                    <div *ngIf="f['password'].touched && f['password'].invalid" class="error-text">
+                        <span *ngIf="f['password'].errors?.['required']">Please fill your password</span>
+                        <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</span>
+                    </div>
+                </div>
+
+
+
+                <button type="submit" [disabled]="loading" class="btn-signin">
+                    <span *ngIf="!loading">Sign in</span>
+                    <span *ngIf="loading">Signing in...</span>
+                </button>
+
+                <div class="register-row">
+                    <span>Are you new?</span>
+                    <a routerLink="/register">Create an Account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

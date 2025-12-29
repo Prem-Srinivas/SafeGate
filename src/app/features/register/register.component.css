@@ -1,0 +1,414 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:host {
+    display: block;
+    font-family: 'Outfit', sans-serif;
+    --primary-glow: rgba(16, 185, 129, 0.4);
+}
+
+.login-container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Background moved to ::before for blurring */
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../../../assets/images/auth-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(5px);
+    transform: scale(1.05);
+    /* Slight scale to hide blurred edges */
+    z-index: 0;
+}
+
+.login-container::after {
+    content: '';
+    position: absolute;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle, rgba(21, 128, 61, 0.08) 0%, transparent 70%);
+    top: -20%;
+    left: -20%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Card */
+.login-card {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    min-height: 750px;
+    background: var(--glass-background);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    /* Clean Platinum Border */
+    border-radius: var(--radius-lg);
+    box-shadow:
+        var(--glass-shadow),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+
+.login-card:hover {
+    transform: scale(1.002);
+}
+
+/* Left Panel */
+.left-panel {
+    flex: 1;
+    background-color: #f0fdf4;
+    /* Minty White tint based on nature background */
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    color: #064e3b;
+    /* Deep emerald text */
+}
+
+.illustration-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.hero-image {
+    width: 100%;
+    max-width: 500px;
+    height: 400px;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.1));
+    object-fit: contain;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.illustration-container::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+    z-index: -1;
+    opacity: 0.3;
+}
+
+.branding-text {
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    z-index: 10;
+}
+
+.branding-text h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--secondary);
+    letter-spacing: -2px;
+    line-height: 1.1;
+}
+
+.branding-text p {
+    font-size: 1.15rem;
+    color: var(--muted-foreground);
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+    font-weight: 500;
+}
+
+.carousel-dots {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--border);
+    transition: all 0.3s;
+}
+
+.dot.active {
+    width: 28px;
+    background-color: var(--primary);
+    border-radius: 4px;
+}
+
+/* Right Panel */
+.right-panel {
+    flex: 0.8;
+    background: #ffffff;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    /* Allow scrolling */
+}
+
+.form-header {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.logo-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--secondary);
+}
+
+.logo-box svg {
+    width: 64px;
+    height: 64px;
+    color: var(--primary);
+}
+
+.logo-box span {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--secondary);
+}
+
+/* Form Styles */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group .label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+    margin-bottom: 0;
+}
+
+.requirement-hint {
+    font-size: 0.75rem;
+    color: var(--primary);
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    background-color: var(--input);
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    color: var(--foreground);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    transform: translateY(-1px);
+}
+
+.input-group input.is-invalid {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+}
+
+.input-group input.is-invalid:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.error-text {
+    font-size: 0.75rem;
+    color: #ef4444;
+    font-weight: 500;
+    margin-top: -0.25rem;
+}
+
+.input-group input::placeholder {
+    color: #94a3b8;
+}
+
+.btn-signin {
+    width: 100%;
+    padding: 1.125rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-top: 1.5rem;
+    box-shadow: 0 10px 20px -10px var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+}
+
+.btn-signin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 30px -10px var(--primary);
+    filter: brightness(1.1);
+}
+
+.btn-signin:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.register-row {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #64748b;
+}
+
+.register-row a {
+    color: #0f172a;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 0.25rem;
+}
+
+.register-row a:hover {
+    text-decoration: underline;
+}
+
+/* Role Selection Specifics */
+.role-grid-compact {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.role-chip {
+    padding: 0.625rem 1.25rem;
+    background: var(--muted);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    user-select: none;
+}
+
+.role-chip:hover {
+    background: var(--border);
+    transform: translateY(-1px);
+}
+
+.role-chip.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 8px 16px -4px var(--primary);
+}
+
+/* Grid Layout for Form */
+.grid-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Animations */
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .login-card {
+        flex-direction: column;
+        height: auto;
+        max-width: 500px;
+    }
+
+    .left-panel {
+        padding: 3rem 2rem;
+        width: 100%;
+    }
+
+    .right-panel {
+        width: 100%;
+        padding: 3rem 2rem;
+    }
+
+    .hero-svg,
+    .hero-image {
+        max-height: 200px;
+    }
+}

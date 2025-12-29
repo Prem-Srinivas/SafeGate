@@ -1,0 +1,167 @@
+<div class="app-container">
+    <!-- Sidebar (Same as Dashboard) -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+            </div>
+            <div class="brand-info">
+                <span class="brand-text">SafeGate</span>
+                <span class="brand-tagline">Secure Community</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a routerLink="/dashboard" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a routerLink="/visitors" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                <span>Visitor Log</span>
+            </a>
+            <a routerLink="/parcels" class="nav-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                    <line x1="12" y1="22.08" x2="12" y2="12" />
+                </svg>
+                <span>Parcel Log</span>
+            </a>
+        </nav>
+
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div>
+                <h1>Parcel Log</h1>
+                <p class="subtitle">Log incoming packages and manage deliveries</p>
+            </div>
+            <!-- Logout button removed as per user request -->
+            <div class="header-tools">
+                <!-- Other header tools if any -->
+            </div>
+        </header>
+
+        <div class="content-grid">
+            <!-- Entry Form -->
+            <div class="grid-column form-column">
+                <div class="premium-card">
+                    <div class="card-header">
+                        <div class="icon-box orange">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                                <line x1="12" y1="22.08" x2="12" y2="12" />
+                            </svg>
+                        </div>
+                        <h3>New Entry</h3>
+                    </div>
+
+                    <form [formGroup]="parcelForm" (ngSubmit)="onSubmit()" class="entry-form">
+                        <div class="form-field">
+                            <label class="form-label">Parcel Description</label>
+                            <input type="text" formControlName="name_details" class="form-input"
+                                placeholder="e.g. Amazon Box, Food Delivery" />
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label">Unit Number</label>
+                            <input type="text" formControlName="unit_number" class="form-input"
+                                placeholder="e.g. A-101" />
+                        </div>
+
+                        <div class="form-field">
+                            <label class="form-label">Photo URL (Optional)</label>
+                            <input type="text" formControlName="media" class="form-input" placeholder="https://..." />
+                        </div>
+
+                        <button type="submit" [disabled]="loading || parcelForm.invalid" class="btn-primary full-width">
+                            <span *ngIf="!loading">Log Parcel</span>
+                            <span *ngIf="loading">Logging...</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Recent List -->
+            <div class="grid-column list-column">
+                <div class="premium-card h-full">
+                    <div class="card-header">
+                        <h3>Recent Parcels</h3>
+                        <div class="search-compact">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="m21 21-4.3-4.3" />
+                            </svg>
+                            <input type="text" placeholder="Search..." [(ngModel)]="searchTerm">
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Unit</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let parcel of recentParcels">
+                                    <td>
+                                        <div class="cell-content">
+                                            <div class="icon-circle small orange">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path
+                                                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                                </svg>
+                                            </div>
+                                            <span class="font-medium">{{ parcel.name_details }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ parcel.resident_unit || parcel.resident_id }}</td>
+                                    <td>
+                                        <span class="status-badge"
+                                            [ngClass]="'status-' + (parcel.status.toLowerCase().replace(' ', '-'))">
+                                            {{ parcel.status }}
+                                        </span>
+                                    </td>
+                                    <td class="text-muted">{{ parcel.created_at | date:'shortTime' }}</td>
+                                </tr>
+                                <tr *ngIf="recentParcels.length === 0">
+                                    <td colspan="4" class="text-center py-8">No parcels found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

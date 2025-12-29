@@ -1,0 +1,183 @@
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+            </div>
+            <span class="brand-text">SafeGate</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <!-- Resident Links -->
+            <a routerLink="/dashboard" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="7" height="9" x="3" y="3" rx="1" />
+                    <rect width="7" height="5" x="14" y="3" rx="1" />
+                    <rect width="7" height="9" x="14" y="12" rx="1" />
+                    <rect width="7" height="5" x="3" y="16" rx="1" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a routerLink="/my-visitors" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                <span>Visitor Log</span>
+            </a>
+            <a routerLink="/my-parcels" class="nav-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                    <line x1="12" y1="22.08" x2="12" y2="12" />
+                </svg>
+                <span>Parcel Log</span>
+            </a>
+        </nav>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div>
+                <h1>My Parcels</h1>
+                <p class="subtitle">Track and collect your deliveries</p>
+            </div>
+            <div class="header-tools">
+                <div class="sidebar-user-info-header">
+                    <div class="user-name">{{ currentUser?.name }}</div>
+                    <div class="user-role">{{ currentUser?.role }}</div>
+                </div>
+                <!-- Logout button removed as per user request -->
+            </div>
+        </header>
+
+        <div *ngIf="loading" class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading parcels...</p>
+        </div>
+
+        <div class="content-wrapper" *ngIf="!loading">
+            <!-- PENDING SECTION -->
+            <section class="approval-stream mb-12">
+                <div class="pending-banner info" *ngIf="getWaitingCount() > 0">
+                    <div class="stat-icon-bg info small">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                            <path d="m3.3 7 8.7 5 8.7-5" />
+                            <path d="M12 22V12" />
+                        </svg>
+                    </div>
+                    <div class="banner-text">
+                        <h3>Packages Waiting</h3>
+                        <p>{{ getWaitingCount() }} parcel{{ getWaitingCount() > 1 ? 's' : '' }} at the security gate
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pending-grid">
+                    <ng-container *ngFor="let parcel of parcels">
+                        <div class="premium-card parcel-card-premium" *ngIf="parcel.status !== 'Collected'">
+                            <div class="card-header-clean">
+                                <div class="name-status">
+                                    <span class="delivery-id">#{{ parcel.id }}</span>
+                                    <span class="status-btn" [ngClass]="'status-' + parcel.status.toLowerCase()">{{
+                                        parcel.status
+                                        }}</span>
+                                </div>
+                                <span class="time-meta">{{ parcel.created_at | date:'shortTime' }}</span>
+                            </div>
+
+                            <div class="parcel-content mt-4">
+                                <h3 class="courier-name">{{ parcel.name_details }}</h3>
+                                <div class="parcel-image-preview mt-2" *ngIf="parcel.media">
+                                    <img [src]="parcel.media" alt="Parcel Photo">
+                                </div>
+                            </div>
+
+                            <div class="card-actions-premium mt-6">
+                                <button class="btn-premium flex-1" *ngIf="parcel.status === 'Pending'"
+                                    (click)="updateStatus(parcel.id, 'Received')">
+                                    Approve
+                                </button>
+                                <button class="btn-outline flex-1" *ngIf="parcel.status === 'Pending'"
+                                    (click)="updateStatus(parcel.id, 'Rejected')">
+                                    Reject
+                                </button>
+
+                                <button class="btn-premium flex-1" *ngIf="parcel.status === 'Received'"
+                                    (click)="updateStatus(parcel.id, 'Acknowledged')">
+                                    Acknowledge
+                                </button>
+                                <button class="btn-success flex-1" *ngIf="parcel.status === 'Acknowledged'"
+                                    (click)="updateStatus(parcel.id, 'Collected')">
+                                    Mark Collected
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </section>
+
+            <!-- HISTORY -->
+            <section class="history-section">
+                <div class="list-header">
+                    <h2>Collection History</h2>
+                    <p>Your previously received and collected parcels</p>
+                </div>
+
+                <div class="premium-card mt-4 table-card">
+                    <div class="table-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Courier</th>
+                                    <th>Status</th>
+                                    <th>Collected On</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let parcel of parcels">
+                                    <tr *ngIf="parcel.status === 'Collected'">
+                                        <td>
+                                            <div class="cell-content">
+                                                <div class="stat-icon-bg small success">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <polyline points="20 6 9 17 4 12" />
+                                                    </svg>
+                                                </div>
+                                                <span class="font-medium">{{ parcel.name_details }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-collected">Collected</span>
+                                        </td>
+                                        <td class="text-muted">{{ parcel.created_at | date:'MMM d, y' }}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr *ngIf="getCollectedCount() === 0">
+                                    <td colspan="3" class="text-center py-8">No collection history</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>

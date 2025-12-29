@@ -1,0 +1,177 @@
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+            </div>
+            <span class="brand-text">SafeGate</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <!-- Resident Links -->
+            <a routerLink="/dashboard" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="7" height="9" x="3" y="3" rx="1" />
+                    <rect width="7" height="5" x="14" y="3" rx="1" />
+                    <rect width="7" height="9" x="14" y="12" rx="1" />
+                    <rect width="7" height="5" x="3" y="16" rx="1" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a routerLink="/my-visitors" class="nav-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                <span>Visitor Log</span>
+            </a>
+            <a routerLink="/my-parcels" class="nav-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                    <line x1="12" y1="22.08" x2="12" y2="12" />
+                </svg>
+                <span>Parcel Log</span>
+            </a>
+        </nav>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div>
+                <h1>Visitor Approvals</h1>
+                <p class="subtitle">Manage entry requests for your unit</p>
+            </div>
+            <div class="header-tools">
+                <div class="sidebar-user-info-header">
+                    <div class="user-name">{{ currentUser?.name }}</div>
+                    <div class="user-role">{{ currentUser?.role }}</div>
+                </div>
+                <!-- Logout button removed as per user request -->
+            </div>
+        </header>
+
+        <div *ngIf="loading" class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading visitors...</p>
+        </div>
+
+        <div class="content-wrapper" *ngIf="!loading">
+            <!-- PENDING REQUESTS -->
+            <section class="approval-stream mb-12">
+                <div class="pending-banner" *ngIf="getPendingCount() > 0">
+                    <div class="stat-icon-bg info small">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                    </div>
+                    <div class="banner-text">
+                        <h3>Action Required</h3>
+                        <p>{{ getPendingCount() }} visitor{{ getPendingCount() > 1 ? 's' : '' }} awaiting your approval
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pending-grid">
+                    <ng-container *ngFor="let visitor of visitors">
+                        <div class="premium-card visitor-approval-card"
+                            *ngIf="visitor.status === 'Waiting for Approval'">
+                            <div class="visitor-header">
+                                <div class="avatar-circle large">{{ getInitials(visitor.name_details) }}</div>
+                                <div class="visitor-main">
+                                    <div class="name-status">
+                                        <h3>{{ visitor.name_details }}</h3>
+                                        <span class="status-badge status-waiting">Waiting</span>
+                                    </div>
+                                    <p class="time-meta">Created {{ visitor.created_at | date:'shortTime' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="visitor-details-grid mt-4">
+                                <div class="detail-item">
+                                    <span class="label">Purpose:</span>
+                                    <span class="value">{{ visitor.purpose_description }}</span>
+                                </div>
+                                <div class="detail-item" *ngIf="visitor.vehicle_details">
+                                    <span class="label">Vehicle:</span>
+                                    <span class="value">{{ visitor.vehicle_details }}</span>
+                                </div>
+                            </div>
+
+                            <div class="card-actions-premium mt-6">
+                                <button class="btn-primary flex-1" (click)="updateStatus(visitor.id, 'Approved')">
+                                    Approve
+                                </button>
+                                <button class="btn-outline flex-1" (click)="updateStatus(visitor.id, 'Rejected')">
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </section>
+
+            <!-- HISTORY -->
+            <section class="history-section">
+                <div class="list-header">
+                    <h2>Recent History</h2>
+                    <p>Past visitor activity for your unit</p>
+                </div>
+
+                <div class="premium-card mt-4 table-card">
+                    <div class="table-container">
+                        <table class="premium-table">
+                            <thead>
+                                <tr>
+                                    <th>Visitor</th>
+                                    <th>Purpose</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let visitor of visitors">
+                                    <tr *ngIf="visitor.status !== 'Waiting for Approval'">
+                                        <td>
+                                            <div class="cell-content">
+                                                <div class="avatar-circle small">{{ getInitials(visitor.name_details) }}
+                                                </div>
+                                                <span class="font-medium">{{ visitor.name_details }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-muted">{{ visitor.purpose_description }}</td>
+                                        <td>
+                                            <span class="status-badge"
+                                                [ngClass]="'status-' + visitor.status.replace(' ', '-').toLowerCase()">
+                                                {{ visitor.status }}
+                                            </span>
+                                        </td>
+                                        <td class="text-muted">{{ visitor.created_at | date:'MMM d, h:mm a' }}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr *ngIf="getHistoryCount() === 0">
+                                    <td colspan="4" class="text-center py-8">No recent history</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>

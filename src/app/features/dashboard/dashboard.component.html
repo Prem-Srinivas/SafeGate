@@ -1,0 +1,362 @@
+<div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+
+        <nav class="sidebar-nav">
+            <a routerLink="/dashboard" class="nav-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+
+            <!-- Dynamic Links based on role -->
+            <ng-container *ngIf="currentUser?.role === 'Resident'; else adminLinks">
+                <a routerLink="/my-visitors" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span>Visitor Log</span>
+                </a>
+                <a routerLink="/my-parcels" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                        <line x1="12" y1="22.08" x2="12" y2="12" />
+                    </svg>
+                    <span>Parcel Log</span>
+                </a>
+            </ng-container>
+
+            <ng-template #adminLinks>
+                <a routerLink="/visitors" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    <span>Visitor Log</span>
+                </a>
+                <a routerLink="/parcels" class="nav-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                        <line x1="12" y1="22.08" x2="12" y2="12" />
+                    </svg>
+                    <span>Parcel Log</span>
+                </a>
+            </ng-template>
+        </nav>
+
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-brand">
+                <div class="header-logo-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                </div>
+                <span class="header-brand-text">SafeGate</span>
+            </div>
+            <h1>{{ currentUser?.role === 'Resident' ? 'Resident Dashboard' : (currentUser?.role === 'Security Guard' ?
+                'Security Dashboard' : 'Admin Dashboard') }}</h1>
+            <!-- Logout button removed as per user request -->
+            <div class="header-tools">
+                <!-- Other header tools if any -->
+            </div>
+        </header>
+
+        <!-- Resident Pending Actions -->
+        <div class="pending-actions mb-8"
+            *ngIf="currentUser?.role === 'Resident' && (stats.visitorsPending > 0 || stats.parcelsPending > 0)">
+            <div class="action-banner warning" *ngIf="stats.visitorsPending > 0" routerLink="/my-visitors">
+                <div class="banner-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                </div>
+                <div class="banner-content">
+                    <h3>Action Required</h3>
+                    <p>You have {{ stats.visitorsPending }} visitor{{ stats.visitorsPending > 1 ? 's' : '' }} waiting
+                        for approval.</p>
+                </div>
+                <div class="banner-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="action-banner info mt-4" *ngIf="stats.parcelsPending > 0" routerLink="/my-parcels">
+                <div class="banner-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                        <line x1="12" y1="22.08" x2="12" y2="12" />
+                    </svg>
+                </div>
+                <div class="banner-content">
+                    <h3>Parcels Waiting</h3>
+                    <p>You have {{ stats.parcelsPending }} package{{ stats.parcelsPending > 1 ? 's' : '' }} at security.
+                    </p>
+                </div>
+                <div class="banner-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 18 6-6-6-6" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card clickable-card"
+                [routerLink]="currentUser?.role === 'Resident' ? '/my-visitors' : '/visitors'">
+                <div class="stat-header">
+                    <div class="stat-icon blue">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </div>
+                    <span class="stat-badge success">+12%</span>
+                </div>
+                <div class="stat-value">{{ stats.totalVisitors }}</div>
+                <div class="stat-label">{{ currentUser?.role === 'Resident' ? 'My Visitors' : 'Total Visitors' }}</div>
+            </div>
+
+            <div class="stat-card clickable-card"
+                [routerLink]="currentUser?.role === 'Resident' ? '/my-parcels' : '/parcels'">
+                <div class="stat-header">
+                    <div class="stat-icon orange">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                            <line x1="12" y1="22.08" x2="12" y2="12" />
+                        </svg>
+                    </div>
+                    <span class="stat-badge success">+8%</span>
+                </div>
+                <div class="stat-value">{{ stats.totalParcels }}</div>
+                <div class="stat-label">{{ currentUser?.role === 'Resident' ? 'My Parcels' : 'Total Parcels' }}</div>
+            </div>
+
+            <div class="stat-card clickable-card"
+                *ngIf="currentUser?.role !== 'Resident' && currentUser?.role !== 'Security Guard'" routerLink="/admin">
+                <div class="stat-header">
+                    <div class="stat-icon green">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                    </div>
+                    <span class="stat-badge success">+2</span>
+                </div>
+                <div class="stat-value">{{ stats.totalResidents }}</div>
+                <div class="stat-label">Residents</div>
+            </div>
+
+            <div class="stat-card" *ngIf="currentUser?.role !== 'Resident' && currentUser?.role !== 'Security Guard'">
+                <div class="stat-header">
+                    <div class="stat-icon purple">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                            <polyline points="17 6 23 6 23 12" />
+                        </svg>
+                    </div>
+                    <span class="stat-badge success">+5%</span>
+                </div>
+                <div class="stat-value">{{ stats.approvalRate }}%</div>
+                <div class="stat-label">Approval Rate</div>
+            </div>
+        </div>
+
+        <!-- Analytics Grid -->
+        <div class="analytics-grid">
+            <div class="analytics-card">
+                <div class="card-title-row">
+                    <div class="card-icon-small blue">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>Visitor Analytics</h3>
+                        <p>Breakdown of visitor statuses</p>
+                    </div>
+                </div>
+
+                <div class="stats-bars">
+                    <div class="stat-bar-row">
+                        <div class="label-group">
+                            <span class="status-dot success"></span>
+                            <span>Approved</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar success"
+                                [style.width.%]="(stats.visitorsApproved / (stats.totalVisitors || 1)) * 100"></div>
+                        </div>
+                        <span class="count">{{ stats.visitorsApproved }}</span>
+                    </div>
+
+                    <div class="stat-bar-row">
+                        <div class="label-group">
+                            <span class="status-dot danger"></span>
+                            <span>Rejected</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar danger"
+                                [style.width.%]="(stats.visitorsRejected / (stats.totalVisitors || 1)) * 100"></div>
+                        </div>
+                        <span class="count">{{ stats.visitorsRejected }}</span>
+                    </div>
+
+                    <div class="stat-bar-row">
+                        <div class="label-group">
+                            <span class="status-dot warning"></span>
+                            <span>Pending</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar warning"
+                                [style.width.%]="(stats.visitorsPending / (stats.totalVisitors || 1)) * 100"></div>
+                        </div>
+                        <span class="count">{{ stats.visitorsPending }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-card">
+                <div class="card-title-row">
+                    <div class="card-icon-small orange">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                            <line x1="12" y1="22.08" x2="12" y2="12" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3>Parcel Analytics</h3>
+                        <p>Breakdown of parcel statuses</p>
+                    </div>
+                </div>
+
+                <div class="stats-bars">
+                    <div class="stat-bar-row">
+                        <div class="label-group">
+                            <span class="status-dot success"></span>
+                            <span>Collected</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar success"
+                                [style.width.%]="(stats.parcelsCollected / (stats.totalParcels || 1)) * 100"></div>
+                        </div>
+                        <span class="count">{{ stats.parcelsCollected }}</span>
+                    </div>
+
+                    <div class="stat-bar-row">
+                        <div class="label-group">
+                            <span class="status-dot warning"></span>
+                            <span>Pending</span>
+                        </div>
+                        <div class="bar-container">
+                            <div class="bar warning"
+                                [style.width.%]="(stats.parcelsPending / (stats.totalParcels || 1)) * 100"></div>
+                        </div>
+                        <span class="count">{{ stats.parcelsPending }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="recent-activity-section">
+            <div class="section-header">
+                <h3>Recent Activity</h3>
+                <p>Latest visitor and parcel entries</p>
+            </div>
+
+            <div class="activity-list">
+                <div class="activity-row" *ngFor="let item of recentActivities">
+                    <!-- Icon based on type -->
+                    <div class="activity-icon-box" [ngClass]="item.type === 'Visitor' ? 'blue' : 'orange'">
+                        <svg *ngIf="item.type === 'Visitor'" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                        <svg *ngIf="item.type === 'Parcel'" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                            <line x1="12" y1="22.08" x2="12" y2="12" />
+                        </svg>
+                    </div>
+
+                    <div class="activity-info">
+                        <div class="activity-main">{{ item.name_details }}</div>
+                        <div class="activity-sub">
+                            {{ item.type }} • For: {{ item.resident_unit || 'Resident' }}
+                        </div>
+                    </div>
+
+                    <div class="activity-time">
+                        {{ item.created_at | date:'MMM d, h:mm a' }}
+                    </div>
+
+                    <div class="activity-status">
+                        <span class="status-badge"
+                            [ngClass]="'status-' + (item.status.toLowerCase().replace(' ', '-'))">{{ item.status
+                            }}</span>
+                    </div>
+                </div>
+
+                <div *ngIf="recentActivities.length === 0" class="empty-state">
+                    No recent activity found.
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

@@ -1,0 +1,137 @@
+<div class="login-container animate-fade-in">
+    <div class="login-card">
+        <!-- Left Panel: Illustration & Branding -->
+        <div class="left-panel">
+            <div class="illustration-container">
+                <img *ngIf="selectedRole === 'Resident' || !selectedRole" src="assets/images/buildings-decor.png"
+                    alt="Building" class="hero-image">
+                <img *ngIf="selectedRole === 'Security Guard'" src="assets/images/security_signup.png" alt="Security"
+                    class="hero-image">
+                <img *ngIf="selectedRole === 'Admin'" src="assets/images/admin_signup.png" alt="Admin"
+                    class="hero-image">
+            </div>
+
+            <div class="branding-text">
+                <h1 *ngIf="selectedRole === 'Resident'">Join as Resident</h1>
+                <h1 *ngIf="selectedRole === 'Security Guard'">Join Security Staff</h1>
+                <h1 *ngIf="selectedRole === 'Admin'">Admin Control</h1>
+                <h1 *ngIf="!selectedRole">Join SafeGate</h1>
+
+                <p *ngIf="selectedRole === 'Resident'">Create an account to manage your visitors, track parcels, and
+                    give approvals seamlessly.</p>
+                <p *ngIf="selectedRole === 'Security Guard'">Professional tools to monitor entry, log visitors, and
+                    manage parcel deliveries.</p>
+                <p *ngIf="selectedRole === 'Admin'">Full system oversight with user management, analytics, and security
+                    control center.</p>
+                <p *ngIf="!selectedRole">Create your account to manage visitors, parcels, and approvals seamlessly.</p>
+            </div>
+
+
+        </div>
+
+        <!-- Right Panel: Registration Form -->
+        <div class="right-panel">
+            <div class="form-header">
+                <div class="logo-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    </svg>
+                    <span>SAFE GATE</span>
+                </div>
+            </div>
+
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="login-form">
+
+                <!-- Role Selection -->
+                <div class="input-group">
+                    <label>Select Role</label>
+                    <div class="role-grid-compact">
+                        <div *ngFor="let role of roles" class="role-chip" [class.selected]="selectedRole === role.id"
+                            (click)="selectRole(role.id)">
+                            <span>{{ role.label }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Name & Phone Grid -->
+                <div class="grid-row">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" formControlName="name" placeholder="e.g. John Doe"
+                            [class.is-invalid]="f['name'].touched && f['name'].invalid" />
+                        <div *ngIf="f['name'].touched && f['name'].invalid" class="error-text">
+                            Please fill your full name
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="tel" formControlName="phone" placeholder="e.g. 9876543210"
+                            [class.is-invalid]="f['phone'].touched && f['phone'].invalid" />
+                        <div *ngIf="f['phone'].touched && f['phone'].invalid" class="error-text">
+                            Please fill your phone number
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unit (if resident) / Badge (if security) & Email Grid -->
+                <div class="grid-row">
+                    <!-- Resident Field -->
+                    <div class="input-group" *ngIf="selectedRole === 'Resident'">
+                        <label>Unit Number</label>
+                        <input type="text" formControlName="unitNumber" placeholder="e.g. A-101"
+                            [class.is-invalid]="f['unitNumber'].touched && f['unitNumber'].invalid" />
+                        <div *ngIf="f['unitNumber']?.touched && f['unitNumber']?.invalid" class="error-text">
+                            Please fill unit number
+                        </div>
+                    </div>
+
+                    <!-- Security Guard Field -->
+                    <div class="input-group" *ngIf="selectedRole === 'Security Guard'">
+                        <label>Badge Number</label>
+                        <input type="text" formControlName="badgeNumber" placeholder="e.g. SG-123"
+                            [class.is-invalid]="f['badgeNumber'].touched && f['badgeNumber'].invalid" />
+                        <div *ngIf="f['badgeNumber']?.touched && f['badgeNumber']?.invalid" class="error-text">
+                            Please fill badge number
+                        </div>
+                    </div>
+
+                    <div class="input-group"
+                        [style.grid-column]="(selectedRole !== 'Resident' && selectedRole !== 'Security Guard') ? '1 / span 2' : 'auto'">
+                        <label>Email Address</label>
+                        <input type="email" formControlName="email" placeholder="name@company.com"
+                            [class.is-invalid]="f['email'].touched && f['email'].invalid" />
+                        <div *ngIf="f['email'].touched && f['email'].invalid" class="error-text">
+                            <span *ngIf="f['email'].errors?.['required']">Please fill your email</span>
+                            <span *ngIf="f['email'].errors?.['email']">Please enter a valid email</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="label-row">
+                        <label>Password</label>
+                        <span class="requirement-hint">Min. 6 characters</span>
+                    </div>
+                    <input [type]="showPassword ? 'text' : 'password'" formControlName="password"
+                        placeholder="Create a secure password"
+                        [class.is-invalid]="f['password'].touched && f['password'].invalid" />
+                    <div *ngIf="f['password'].touched && f['password'].invalid" class="error-text">
+                        <span *ngIf="f['password'].errors?.['required']">Please fill a password</span>
+                        <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</span>
+                    </div>
+                </div>
+
+                <button type="submit" [disabled]="loading" class="btn-signin">
+                    <span *ngIf="!loading">Create Account</span>
+                    <span *ngIf="loading">Creating...</span>
+                </button>
+
+                <div class="register-row">
+                    <span>Already have an account?</span>
+                    <a routerLink="/login">Sign In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
